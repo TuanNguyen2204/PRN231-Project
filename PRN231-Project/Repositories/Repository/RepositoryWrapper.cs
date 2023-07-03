@@ -12,6 +12,7 @@ namespace Repositories.Repository
     {
         private ClothesStoreContext _context;
         private IColorRepository _colorRepository;
+        private IProductRepository _productRepository;
 
         public RepositoryWrapper(ClothesStoreContext context)
         {
@@ -27,6 +28,17 @@ namespace Repositories.Repository
                     _colorRepository = new ColorRepository(_context);
                 }
                 return _colorRepository;
+            }
+        }
+        public IProductRepository Product
+        {
+            get
+            {
+                if (_productRepository == null)
+                {
+                    _productRepository = new ProductRepository(_context);
+                }
+                return _productRepository;
             }
         }
 
