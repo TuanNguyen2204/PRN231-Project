@@ -9,6 +9,7 @@ namespace Repositories.Interfaces
     public interface IRepositoryWrapper
     {
         IColorRepository Color { get; }
+        IProductRepository Product { get; }
         void Save();
     }
 }
