@@ -8,5 +8,7 @@ namespace BusinessObjects.QueryParameters
 {
     public class ProductParameters : QueryStringParameters
     {
+        public int CatId { get; set; }
+        public string? ProductName { get; set; }
     }
 }

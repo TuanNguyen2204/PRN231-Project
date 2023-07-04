@@ -1,5 +1,6 @@
 using BusinessObjects.Models;
 using eClothesAPI.AutoMapper;
+using Microsoft.AspNetCore.OData;
 using NLog;
 using Repositories.Interfaces;
 using Repositories.Repository;
@@ -19,6 +20,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<ClothesStoreContext>();
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
+builder.Services.AddControllers().AddOData(op => op.Select().Expand().Filter().Count().OrderBy().SetMaxTop(100));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
