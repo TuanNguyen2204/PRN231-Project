@@ -8,7 +8,7 @@ using Repositories.Interfaces;
 
 namespace eClothesAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -141,6 +141,24 @@ namespace eClothesAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside DeleteProduct action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet]
+        [ActionName("ExportExcel")]
+        public IActionResult GetExportExcel()
+        {
+            try
+            {
+                var products = _repository.Product.ExportExel();
+                _logger.LogInfo($"Returned all products from database.");
+                var productsResult = _mapper.Map<IEnumerable<ProductDTO>>(products);
+                return Ok(productsResult);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetAllOwners action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

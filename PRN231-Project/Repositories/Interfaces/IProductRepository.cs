@@ -10,10 +10,11 @@ namespace Repositories.Interfaces
 {
     public interface IProductRepository : IRepositoryBase<Product>
     {
-        IEnumerable<Product> GetProducts(ProductParameters productParameters);
+        PagedList<Product> GetProducts(ProductParameters productParameters);
         Product GetProductDetails(int productId);
         void CreateProduct(Product product);    
         void UpdateProduct(Product product);
         void DeleteProduct(Product product);
+        IEnumerable<Product> ExportExel();
     }
 }
