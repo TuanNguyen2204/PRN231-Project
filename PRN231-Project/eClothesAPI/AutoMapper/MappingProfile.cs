@@ -12,6 +12,7 @@ namespace eClothesAPI.AutoMapper
                 .ForMember(dest => dest.CategoryName,
                 opt => opt.MapFrom(src => src.Category.CategoryName));
             CreateMap<ProductCreateUpdateDTO, Product>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }

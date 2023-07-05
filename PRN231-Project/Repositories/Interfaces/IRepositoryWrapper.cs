@@ -10,6 +10,7 @@ namespace Repositories.Interfaces
     {
         IColorRepository Color { get; }
         IProductRepository Product { get; }
+        IUserRepository User { get; }
         void Save();
     }
 }
