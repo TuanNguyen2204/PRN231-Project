@@ -14,6 +14,9 @@ namespace Repositories.Repository
         private IColorRepository _colorRepository;
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
+        private IUserRepository _userRepository;
+        private IInventoryRepository _inventoryRepository;
+
         public RepositoryWrapper(ClothesStoreContext context)
         {
             _context = context;
@@ -51,6 +54,30 @@ namespace Repositories.Repository
                     _categoryRepository = new CategoryRepository(_context);
                 }
                 return _categoryRepository;
+            }
+        }
+
+        public IUserRepository User
+        {
+            get
+            {
+                if (_userRepository == null)
+                {
+                    _userRepository = new UserRepository(_context);
+                }
+                return _userRepository;
+            }
+        }
+
+        public IInventoryRepository Inventory
+        {
+            get
+            {
+                if (_inventoryRepository == null)
+                {
+                    _inventoryRepository = new InventoryRepository(_context);
+                }
+                return _inventoryRepository;
             }
         }
 

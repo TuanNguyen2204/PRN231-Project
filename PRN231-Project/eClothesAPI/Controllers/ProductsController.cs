@@ -45,7 +45,7 @@ namespace eClothesAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside GetAllOwners action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetProducts action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -101,7 +101,7 @@ namespace eClothesAPI.Controllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public IActionResult UpdateProduct(int id, [FromBody] ProductCreateUpdateDTO productDto)
         {
             try
