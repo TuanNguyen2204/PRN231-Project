@@ -23,7 +23,7 @@ namespace BusinessObjects.Models
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Address { get; set; } = null!;
-        public int IsSeller { get; set; }
+        public bool IsSeller { get; set; }
 
         public virtual ICollection<Cart> Carts { get; set; }
         public virtual ICollection<ChatMessage> ChatMessageReceivers { get; set; }
