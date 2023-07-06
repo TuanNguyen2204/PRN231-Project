@@ -4,6 +4,7 @@ using BusinessObjects.Models;
 using BusinessObjects.QueryParameters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Repositories.Interfaces;
 
 namespace eClothesAPI.Controllers
@@ -30,6 +31,16 @@ namespace eClothesAPI.Controllers
                 var products = _repository.Product.GetProducts(productParameters);
                 _logger.LogInfo($"Returned all products from database.");
                 var productsResult = _mapper.Map<IEnumerable<ProductDTO>>(products);
+                var metadata = new
+                {
+                    products.TotalCount,
+                    products.PageSize,
+                    products.CurrentPage,
+                    products.TotalPages,
+                    products.HasNext,
+                    products.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(productsResult);
             }
             catch (Exception ex)
