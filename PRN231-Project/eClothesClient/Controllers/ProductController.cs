@@ -1,7 +1,5 @@
 ﻿using BusinessObjects.DTOs;
 using BusinessObjects.Models;
-using eClothesClient.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -60,9 +58,6 @@ namespace eClothesClient.Controllers
                 ViewBag.Products = products;
                 ViewBag.PaginationMetadata = paginationMetadata;
 
-
-
-
                 return View();
             }
 
@@ -75,5 +70,23 @@ namespace eClothesClient.Controllers
 
 
         }
+
+
+        public async Task<IActionResult> Details(int productId)
+        {
+            HttpResponseMessage response = await client.GetAsync("https://localhost:7115/api/Products/GetProductDetail/" + productId);
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+         
+
+            ProductDTO product = JsonConvert.DeserializeObject<ProductDTO>(strData);
+
+            return View(product);
+        }
+
     }
 }

@@ -1606,7 +1606,8 @@ ol {
 }
 
 .product__details__text {
-	text-align: center;
+	text-align: start;
+	padding: 20px;
 }
 
 .product__details__text h4 {
