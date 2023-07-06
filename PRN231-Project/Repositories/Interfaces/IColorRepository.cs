@@ -11,5 +11,7 @@ namespace Repositories.Interfaces
     {
         IEnumerable<Color> GetAllColors();
         void CreateColor(Color color);
+
+       
     }
 }
