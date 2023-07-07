@@ -210,7 +210,7 @@ namespace BusinessObjects.Models
             {
                 entity.ToTable("ORDER_DETAILS");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.HasKey(e => new {e.ProductId, e.OrderId});
 
                 entity.Property(e => e.ColorId).HasColumnName("COLOR_ID");
 

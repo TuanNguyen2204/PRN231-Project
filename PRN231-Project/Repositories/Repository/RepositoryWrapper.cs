@@ -16,6 +16,8 @@ namespace Repositories.Repository
         private ICategoryRepository _categoryRepository;
         private IUserRepository _userRepository;
         private IInventoryRepository _inventoryRepository;
+        private IOrderRepository _orderRepository;
+        private IOrderDetailRepository _orderDetailRepository;
 
         public RepositoryWrapper(ClothesStoreContext context)
         {
@@ -78,6 +80,30 @@ namespace Repositories.Repository
                     _inventoryRepository = new InventoryRepository(_context);
                 }
                 return _inventoryRepository;
+            }
+        }
+
+        public IOrderRepository Order
+        {
+            get
+            {
+                if (_orderRepository == null)
+                {
+                    _orderRepository = new OrderRepository(_context);
+                }
+                return _orderRepository;
+            }
+        }
+
+        public IOrderDetailRepository OrderDetail
+        {
+            get
+            {
+                if (_orderDetailRepository == null)
+                {
+                    _orderDetailRepository = new OrderDetailRepository(_context);
+                }
+                return _orderDetailRepository;
             }
         }
 

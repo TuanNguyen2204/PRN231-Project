@@ -13,6 +13,8 @@ namespace Repositories.Interfaces
         ICategoryRepository Category { get; }
         IUserRepository User { get; }
         IInventoryRepository Inventory { get; } 
+        IOrderRepository Order { get; }
+        IOrderDetailRepository OrderDetail { get; }
         void Save();
     }
 }
