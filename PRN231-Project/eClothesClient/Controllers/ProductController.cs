@@ -77,13 +77,25 @@ namespace eClothesClient.Controllers
             HttpResponseMessage response = await client.GetAsync("https://localhost:7115/api/Products/GetProductDetail/" + productId);
             string strData = await response.Content.ReadAsStringAsync();
 
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-         
-
             ProductDTO product = JsonConvert.DeserializeObject<ProductDTO>(strData);
+
+            // Retrieve colors
+            var colorsResponse = await client.GetAsync($"https://localhost:7115/api/Inventory/GetColorById/{productId}");
+            var colorsResponseContent = await colorsResponse.Content.ReadAsStringAsync();
+            var colors = JsonConvert.DeserializeObject<IEnumerable<ColorDTO>>(colorsResponseContent);
+
+            // Set the selected color ID to the first color (or any default value)
+            var selectedColorId = colors.FirstOrDefault()?.ColorId;
+            
+
+            // Retrieve sizes by color ID
+            var sizesResponse = await client.GetAsync($"https://localhost:7115/api/Inventory/GetSizesByColorId/{productId}/sizes?colorId={selectedColorId}");
+            var sizesResponseContent = await sizesResponse.Content.ReadAsStringAsync();
+            var sizes = JsonConvert.DeserializeObject<IEnumerable<SizeDTO>>(sizesResponseContent);
+
+            ViewBag.Colors = colors;
+            ViewBag.Size = sizes;
+            ViewBag.SelectedColorId = selectedColorId;
 
             return View(product);
         }

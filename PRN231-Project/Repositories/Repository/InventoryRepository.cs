@@ -31,6 +31,14 @@ namespace Repositories.Repository
             return FindAll().Include(p => p.Product).ThenInclude(p => p.Category).Include(s => s.Size).Include(c => c.Color).ToList();
         }
 
+        public IEnumerable<Color> GetColorByProductId(int productId)
+        {
+            return FindByCondition(i => i.ProductId.Equals(productId)).Select(inv => inv.Color).Distinct();
+        }
+        public IEnumerable<Size> GetSizeByColorId(int productId, int colorId)
+        {
+            return FindByCondition(i => i.ProductId.Equals(productId) && i.ColorId.Equals(colorId)).Select(inv => inv.Size).Distinct();
+        }
         public PagedList<Inventory> GetInventories(InventoryParameters inventoryParameters)
         {
             var inventories = FindAll();
@@ -43,6 +51,8 @@ namespace Repositories.Repository
         {
             return FindByCondition(i => i.Id.Equals(InventoryId)).FirstOrDefault();
         }
+
+       
 
         public void UpdateInventory(Inventory Inventory)
         {

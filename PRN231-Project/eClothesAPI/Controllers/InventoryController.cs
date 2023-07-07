@@ -5,6 +5,7 @@ using BusinessObjects.QueryParameters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Interfaces;
+using Repositories.Repository;
 
 namespace eClothesAPI.Controllers
 {
@@ -38,6 +39,22 @@ namespace eClothesAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet("{id}")]        
+        
+        public IActionResult GetColorById(int id)
+        {
+            var color = _repository.Inventory.GetColorByProductId(id);
+            return Ok(color);
+        }
+
+        [HttpGet("{productId}/sizes")]
+        public IActionResult GetSizesByColorId(int productId, int colorId)
+        {
+            var sizes = _repository.Inventory.GetSizeByColorId(productId, colorId);
+            return Ok(sizes);
+        }
+
 
         [HttpPost]
         public IActionResult CreateInventory([FromBody] InventoryCreateUpdateDTO Inventory)
