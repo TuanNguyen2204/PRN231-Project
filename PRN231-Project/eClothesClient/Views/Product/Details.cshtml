@@ -1,8 +1,17 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model BusinessObjects.DTOs.ProductDTO
+﻿@using BusinessObjects.DTOs;
+@using BusinessObjects.Models;
 
+@model BusinessObjects.DTOs.ProductDTO
+@{
+    var colors = ViewBag.Colors as IEnumerable<ColorDTO>;
+    var sizes = ViewBag.Size as IEnumerable<SizeDTO>;
+    int? SelectedColorId = ViewBag.SelectedColorId;
+}
+<style>
+    .list, .nice-select {
+        width: 300px;
+    }
+</style>
 <section class="shop-details">
     <div class="product__details__pic">
         <div class="container">
@@ -37,11 +46,12 @@
                                 <img src="@Model.Image" alt="">
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="col-md-7 col-lg-6 p-b-30">
                     <div style="text-align:start;padding:20px;" class="product__details__text">
+
                         <h4>@Model.Name</h4>
                         <div class="rating">
                             <i class="fa fa-star"></i>
@@ -52,50 +62,35 @@
                             <span> - 5 Reviews</span>
                         </div>
                         <h3>@Model.Price <span>70.00</span></h3>
-                        <p>
+                        <p class="mb-2">
                             Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
                             cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
                             with placket.@Model.Description
                         </p>
+                        
                         <div class="product__details__option">
-                            <div class="product__details__option__size">
-                                <span>Size:</span>
-                                <label for="xxl">
-                                    xxl
-                                    <input type="radio" id="xxl">
-                                </label>
-                                <label class="active" for="xl">
-                                    xl
-                                    <input type="radio" id="xl">
-                                </label>
-                                <label for="l">
-                                    l
-                                    <input type="radio" id="l">
-                                </label>
-                                <label for="sm">
-                                    s
-                                    <input type="radio" id="sm">
-                                </label>
+                            <div style="display:inline-block;">
+                                <h6 class="mb-2">Color:</h6>
+                                <select id="colorSelect" onchange="onColorChange()">
+                                    @foreach (var color in colors)
+                                    {
+                                        <option value="@color.ColorId">@color.ColorName</option>
+                                    }
+                                </select>
                             </div>
-                            <div class="product__details__option__color">
-                                <span>Color:</span>
-                                <label class="c-1" for="sp-1">
-                                    <input type="radio" id="sp-1">
-                                </label>
-                                <label class="c-2" for="sp-2">
-                                    <input type="radio" id="sp-2">
-                                </label>
-                                <label class="c-3" for="sp-3">
-                                    <input type="radio" id="sp-3">
-                                </label>
-                                <label class="c-4" for="sp-4">
-                                    <input type="radio" id="sp-4">
-                                </label>
-                                <label class="c-9" for="sp-9">
-                                    <input type="radio" id="sp-9">
-                                </label>
+
+                            <h6 class="mt-2 mb-2">Size:</h6>
+                            <div class="product__details__option__size" id="sizeList">
+                                @foreach (var size in sizes)
+                                {
+                                    <label for="@size.SizeName">
+                                        @size.SizeName
+                                        <input type="radio" id="@size.SizeName" name="size" value="@size.SizeId">
+                                    </label>
+                                }
                             </div>
                         </div>
+
                         <div class="product__details__cart__option">
                             <div class="quantity">
                                 <div class="pro-qty">
@@ -266,3 +261,55 @@
         </div>
     </div>
 </section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).on("change", "[name='size']", function () {
+        // Remove the "active" class from all labels
+        $("[name='size']").parent().removeClass("active");
+
+        // Add the "active" class to the selected label
+        $(this).parent().addClass("active");
+
+        // Get the selected size value
+        var selectedSize = $(this).val();
+        console.log("Selected size:", selectedSize);
+    });
+    function onColorChange() {
+        var selectedColorId = document.getElementById("colorSelect").value;
+        console.log(selectedColorId);
+        var productId = @Model.Id;
+
+        // Make an AJAX request to retrieve sizes by color ID
+        $.ajax({
+            url: `https://localhost:7115/api/Inventory/GetSizesByColorId/${productId}/sizes?colorId=${selectedColorId}`,
+            type: "GET",
+            success: function (data) {
+                // Update the size list with the retrieved sizes
+                var sizeList = document.getElementById("sizeList");
+                sizeList.innerHTML = "";
+
+                if (data &&data.length > 0) {
+                    data.forEach(function (size) {
+                        var label = document.createElement("label");
+                        label.setAttribute("for", size.sizeName);
+                        label.innerHTML = `
+                            ${size.sizeName}
+                            <input type="radio" id="${size.sizeName}" name="size" value="${size.sizeId}">
+                        `;
+                        sizeList.appendChild(label);
+
+                        console.log(data);
+                    });
+                } else {
+                    var label = document.createElement("label");
+                    label.innerHTML = "No sizes available";
+                    sizeList.appendChild(label);
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
