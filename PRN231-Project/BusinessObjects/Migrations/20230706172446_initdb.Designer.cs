@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObjects.Migrations
 {
     [DbContext(typeof(ClothesStoreContext))]
-    [Migration("20230705090500_tuannv_v1")]
-    partial class tuannv_v1
+    [Migration("20230706172446_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -231,28 +231,21 @@ namespace BusinessObjects.Migrations
 
             modelBuilder.Entity("BusinessObjects.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ProductId")
                         .HasColumnType("int")
-                        .HasColumnName("ID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ColorId")
-                        .HasColumnType("int")
-                        .HasColumnName("COLOR_ID");
+                        .HasColumnName("PRODUCT_ID");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int")
                         .HasColumnName("ORDER_ID");
 
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int")
+                        .HasColumnName("COLOR_ID");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)")
                         .HasColumnName("PRICE");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasColumnName("PRODUCT_ID");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
@@ -262,13 +255,11 @@ namespace BusinessObjects.Migrations
                         .HasColumnType("int")
                         .HasColumnName("SIZE_ID");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId", "OrderId");
 
                     b.HasIndex("ColorId");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("SizeId");
 

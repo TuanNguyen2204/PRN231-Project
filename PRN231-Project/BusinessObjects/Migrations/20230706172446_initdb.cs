@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BusinessObjects.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,7 +59,7 @@ namespace BusinessObjects.Migrations
                     NAME = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     EMAIL = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     ADDRESS = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    IS_SELLER = table.Column<int>(type: "int", nullable: false)
+                    IS_SELLER = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -256,8 +256,6 @@ namespace BusinessObjects.Migrations
                 name: "ORDER_DETAILS",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     ORDER_ID = table.Column<int>(type: "int", nullable: false),
                     PRODUCT_ID = table.Column<int>(type: "int", nullable: false),
                     SIZE_ID = table.Column<int>(type: "int", nullable: false),
@@ -267,7 +265,7 @@ namespace BusinessObjects.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ORDER_DETAILS", x => x.ID);
+                    table.PrimaryKey("PK_ORDER_DETAILS", x => new { x.PRODUCT_ID, x.ORDER_ID });
                     table.ForeignKey(
                         name: "FK_ORDER_DETAILS_COLORS",
                         column: x => x.COLOR_ID,
@@ -344,11 +342,6 @@ namespace BusinessObjects.Migrations
                 name: "IX_ORDER_DETAILS_ORDER_ID",
                 table: "ORDER_DETAILS",
                 column: "ORDER_ID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ORDER_DETAILS_PRODUCT_ID",
-                table: "ORDER_DETAILS",
-                column: "PRODUCT_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ORDER_DETAILS_SIZE_ID",
