@@ -10,5 +10,6 @@ namespace BusinessObjects.QueryParameters
     {
         public int CatId { get; set; }
         public string? ProductName { get; set; }
+        public string? OrderBy { get; set; }
     }
 }
