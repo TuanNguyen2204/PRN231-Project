@@ -57,7 +57,19 @@ namespace eClothesClient.Controllers
 
                 ViewBag.Products = products;
                 ViewBag.PaginationMetadata = paginationMetadata;
+                var cartJson = HttpContext.Session.GetString("Cart");
+                var cart = new List<CartItemDTO>();
 
+                if (!string.IsNullOrEmpty(cartJson))
+                {
+                    cart = JsonConvert.DeserializeObject<List<CartItemDTO>>(cartJson);
+                }
+                var count = cart.Count();
+                ViewData["cartcount"] = count;
+                if (count == 0)
+                {
+                    ViewData["cartcount"] = 0;
+                }
                 return View();
             }
 
@@ -67,6 +79,8 @@ namespace eClothesClient.Controllers
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 return View("Error");
             }
+            
+            
 
 
         }
@@ -96,6 +110,19 @@ namespace eClothesClient.Controllers
             ViewBag.Colors = colors;
             ViewBag.Size = sizes;
             ViewBag.SelectedColorId = selectedColorId;
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = new List<CartItemDTO>();
+
+            if (!string.IsNullOrEmpty(cartJson))
+            {
+                cart = JsonConvert.DeserializeObject<List<CartItemDTO>>(cartJson);
+            }
+            var count = cart.Count();
+            ViewData["cartcount"] = count;
+            if (count == 0)
+            {
+                ViewData["cartcount"] = 0;
+            }
 
             return View(product);
         }

@@ -3,6 +3,7 @@
 
 @model BusinessObjects.DTOs.ProductDTO
 @{
+
     var colors = ViewBag.Colors as IEnumerable<ColorDTO>;
     var sizes = ViewBag.Size as IEnumerable<SizeDTO>;
     int? SelectedColorId = ViewBag.SelectedColorId;
@@ -67,7 +68,7 @@
                             cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
                             with placket.@Model.Description
                         </p>
-                        
+
                         <div class="product__details__option">
                             <div style="display:inline-block;">
                                 <h6 class="mb-2">Color:</h6>
@@ -81,12 +82,19 @@
 
                             <h6 class="mt-2 mb-2">Size:</h6>
                             <div class="product__details__option__size" id="sizeList">
-                                @foreach (var size in sizes)
+                                @if (sizes != null && sizes.Any())
                                 {
-                                    <label for="@size.SizeName">
-                                        @size.SizeName
-                                        <input type="radio" id="@size.SizeName" name="size" value="@size.SizeId">
-                                    </label>
+                                    foreach (var size in sizes)
+                                    {
+                                        <label for="@size.SizeName">
+                                            @size.SizeName
+                                            <input type="radio" id="@size.SizeName" name="size" value="@size.SizeId">
+                                        </label>
+                                    }
+                                }
+                                else
+                                {
+                                    <label>No sizes available</label>
                                 }
                             </div>
                         </div>
@@ -97,7 +105,7 @@
                                     <input type="text" value="1">
                                 </div>
                             </div>
-                            <a href="#" class="primary-btn">add to cart</a>
+                            <a href="#" class="primary-btn" onclick="addToCart()">add to cart</a>
                         </div>
                         <div class="product__details__btns__option">
                             <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
@@ -288,14 +296,17 @@
                 var sizeList = document.getElementById("sizeList");
                 sizeList.innerHTML = "";
 
-                if (data &&data.length > 0) {
+                if (data && data.length > 0) {
                     data.forEach(function (size) {
                         var label = document.createElement("label");
                         label.setAttribute("for", size.sizeName);
                         label.innerHTML = `
-                            ${size.sizeName}
-                            <input type="radio" id="${size.sizeName}" name="size" value="${size.sizeId}">
-                        `;
+                                    ${size.sizeName}
+                                    <input type="radio" id="${size.sizeName}" name="size" value="${size.sizeId}">
+                                `;
+
+
+
                         sizeList.appendChild(label);
 
                         console.log(data);
@@ -306,6 +317,62 @@
                     sizeList.appendChild(label);
                 }
 
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    
+        function addToCart() {
+            // Get the selected color and size
+            var selectedColorId = document.getElementById("colorSelect").value;
+            var selectedColorName = document.getElementById("colorSelect").options[document.getElementById("colorSelect").selectedIndex].text;
+            var selectedSizeId = document.querySelector("[name='size']:checked")?.value;
+            var selectedSizeName = document.querySelector("[name='size']:checked")?.getAttribute("id");
+            var quantity = parseInt(document.querySelector('.pro-qty input[type="text"]').value);
+            // Validate that both color and size are selected
+            if (!selectedColorId || !selectedSizeId) {
+                alert("Please select a color and size.");
+                return;
+            }
+
+            // Create a cart item object with the selected color and size
+            var cartItem = {
+                product: @Html.Raw(Json.Serialize(Model)), // Assuming the product information is available in the Model
+                colorId: selectedColorId,
+                colorName: selectedColorName,
+                sizeId: selectedSizeId,
+                sizeName: selectedSizeName,
+                quantity: quantity
+            };
+
+            // Make an AJAX request to the server to add the item to the cart
+            $.ajax({
+                url: '/Cart/AddToCart',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(cartItem),
+                success: function () {
+                updateCartCount();
+                    alert("Item added to cart successfully.");
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("An error occurred while adding the item to the cart.");
+                }
+            });
+        }
+
+    function updateCartCount() {
+        // Fetch the updated cart count from the server
+        $.ajax({
+            url: '/Cart/GetCartCount',
+            type: 'GET',
+            success: function (count) {
+                // Update the cart count in the UI
+                $('#cartCount').text(count);
             },
             error: function (error) {
                 console.log(error);
