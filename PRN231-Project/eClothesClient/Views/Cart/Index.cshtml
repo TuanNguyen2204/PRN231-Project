@@ -1,0 +1,117 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<BusinessObjects.DTOs.CartItemDTO>
+
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Shopping Cart</h4>
+                    <div class="breadcrumb__links">
+                        <a href="./index.html">Home</a>
+                        <a href="./shop.html">Shop</a>
+                        <span>Shopping Cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shopping__cart__table">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="product__cart__item">
+                                            <div class="product__cart__item__pic">
+                                                <img src="@item.Product.Image" width="90" height="90" alt="">
+                                            </div>
+                                            <div class="product__cart__item__text">
+                                                <h6>@item.Product.Name</h6>
+                                                <h5>$@item.Product.Price</h5>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @item.ColorName
+                                        </td>
+                                        <td>
+                                            @item.SizeName
+                                        </td>
+                                        <td class="quantity__item">
+                                            <div class="quantity">
+                                                <div class="">
+                                                    <a style="font-weight:bold;color:#111111;" asp-controller="cart" asp-action="onclickaction" asp-route-productId="@item.Product.Id" asp-route-colorId="@item.ColorId" asp-route-sizeId="@item.SizeId" asp-route-actionType="plus">+</a>
+                                                    <span> @item.Quantity</span>
+                                                    <a style="font-weight:bold;color:#111111;" asp-controller="cart" asp-action="onclickaction" asp-route-productId="@item.Product.Id" asp-route-colorId="@item.ColorId" asp-route-sizeId="@item.SizeId" asp-route-actionType="minus">-</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="cart__price" id="cartPrice_@item.Product.Id">$ @(item.Product.Price * item.Quantity)</td>
+                                        <td class="cart__close">
+                                            <a asp-controller="cart" asp-action="onclickaction" asp-route-productId="@item.Product.Id" asp-route-colorId="@item.ColorId" asp-route-sizeId="@item.SizeId" asp-route-actionType="remove"><i class="fa fa-close"></i></a>
+
+                                    </td>
+                                       
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                        </table>
+                        <div style="display: flex; justify-content:end; margin:20px 0px 20px 0px">
+
+                            <h4>Total: $ @ViewData["total"]</h4>
+
+                        </div> 
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="continue__btn">
+                                    <a href="#">Continue Shopping</a>
+                                </div>  
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="continue__btn update__btn">
+                                    <a href="#"><i class="fa fa-spinner"></i> Order</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Cart is empty</p>
+                    }
+                </div>
+
+                
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+

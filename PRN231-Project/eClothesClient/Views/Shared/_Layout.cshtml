@@ -25,10 +25,7 @@
 </head>
 
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+    
 
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
@@ -119,7 +116,14 @@
                     <div class="header__nav__option">
                         <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
                         <a href="#"><img src="~/img/icon/heart.png" alt=""></a>
-                        <a href="#"><img src="~/img/icon/cart.png" alt=""><span>10</span></a>
+                        <a href="/Cart/Index">
+                            <img src="~/img/icon/cart.png" alt="">
+                            <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                                @ViewData["cartcount"]
+                            </span>
+                        </a>
+
                         <div class="price">$0.00</div>
                     </div>
                 </div>
@@ -127,7 +131,7 @@
             <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
     </header>
-            @RenderBody()
+    @RenderBody()
 
     <!-- Footer Section Begin -->
     <footer class="footer">
@@ -205,6 +209,10 @@
             </form>
         </div>
     </div>
+
+   
+
+
     <!-- Search End -->
     <!-- Js Plugins -->
     <script src="~/js/jquery-3.3.1.min.js"></script>
