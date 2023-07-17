@@ -158,18 +158,30 @@ namespace eClothesAPI.Controllers
 
         [HttpGet]
         [ActionName("ExportExcel")]
-        public IActionResult GetExportExcel()
+        public IActionResult GetExportExcel([FromQuery] ProductParameters productParameters)
         {
             try
             {
-                var products = _repository.Product.ExportExel();
+                var allProduct = _repository.Product.GetAllProducts();
+                productParameters.PageSize = allProduct.Count();
+                var products = _repository.Product.GetProducts(productParameters);
                 _logger.LogInfo($"Returned all products from database.");
                 var productsResult = _mapper.Map<IEnumerable<ProductDTO>>(products);
+                var metadata = new
+                {
+                    products.TotalCount,
+                    products.PageSize,
+                    products.CurrentPage,
+                    products.TotalPages,
+                    products.HasNext,
+                    products.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(productsResult);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside GetAllOwners action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside GetProducts action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

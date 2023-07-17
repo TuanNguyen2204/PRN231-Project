@@ -15,6 +15,7 @@ namespace Repositories.Interfaces
         void CreateProduct(Product product);    
         void UpdateProduct(Product product);
         void DeleteProduct(Product product);
-        IEnumerable<Product> ExportExel();
+        List<Product> GetAllProducts();
+        IEnumerable<Product> ExportExel(ProductParameters productParameters);
     }
 }
