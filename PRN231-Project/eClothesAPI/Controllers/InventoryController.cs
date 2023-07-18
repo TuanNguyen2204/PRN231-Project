@@ -4,6 +4,7 @@ using BusinessObjects.Models;
 using BusinessObjects.QueryParameters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Repositories.Interfaces;
 using Repositories.Repository;
 
@@ -31,11 +32,47 @@ namespace eClothesAPI.Controllers
                 var Inventories = _repository.Inventory.GetInventories(InventoryParameters);
                 _logger.LogInfo($"Returned all Inventories from database.");
                 var InventorysResult = _mapper.Map<IEnumerable<InventoryDTO>>(Inventories);
+                var metadata = new
+                {
+                    Inventories.TotalCount,
+                    Inventories.PageSize,
+                    Inventories.CurrentPage,
+                    Inventories.TotalPages,
+                    Inventories.HasNext,
+                    Inventories.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(InventorysResult);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside GetInventorys action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpGet("{id}")]
+
+        public IActionResult GetInventoryById(int id)
+        {
+            try
+            {
+                var inventory = _repository.Inventory.GetInventoryDetails(id);
+                if (inventory == null)
+                {
+                    _logger.LogError($"Inventory with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned inventory with details for id: {id}");
+
+                    var inventoryResult = _mapper.Map<InventoryDTO>(inventory);
+                    return Ok(inventoryResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetInventoryDetails action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -147,13 +184,25 @@ namespace eClothesAPI.Controllers
         }
         [HttpGet]
         [ActionName("ExportExcel")]
-        public IActionResult GetExportExcel()
+        public IActionResult GetExportExcel([FromQuery] InventoryParameters InventoryParameters)
         {
             try
             {
-                var Inventories = _repository.Inventory.ExportExel();
+                var allInventories = _repository.Inventory.GetAllInventories();
+                InventoryParameters.PageSize = allInventories.Count();
+                var Inventories = _repository.Inventory.GetInventories(InventoryParameters);
                 _logger.LogInfo($"Returned all Inventorys from database.");
                 var InventorysResult = _mapper.Map<IEnumerable<InventoryDTO>>(Inventories);
+                var metadata = new
+                {
+                    Inventories.TotalCount,
+                    Inventories.PageSize,
+                    Inventories.CurrentPage,
+                    Inventories.TotalPages,
+                    Inventories.HasNext,
+                    Inventories.HasPrevious
+                };
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
                 return Ok(InventorysResult);
             }
             catch (Exception ex)

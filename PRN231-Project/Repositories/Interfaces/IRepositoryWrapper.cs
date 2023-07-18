@@ -9,6 +9,7 @@ namespace Repositories.Interfaces
     public interface IRepositoryWrapper
     {
         IColorRepository Color { get; }
+        ISizeRepository Size { get; }
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
         IUserRepository User { get; }

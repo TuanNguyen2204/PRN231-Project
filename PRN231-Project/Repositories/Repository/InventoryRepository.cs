@@ -26,9 +26,26 @@ namespace Repositories.Repository
             Delete(Inventory);
         }
 
-        public IEnumerable<Inventory> ExportExel()
+        public IEnumerable<Inventory> ExportExel(InventoryParameters inventoryParameters)
         {
-            return FindAll().Include(p => p.Product).ThenInclude(p => p.Category).Include(s => s.Size).Include(c => c.Color).ToList();
+            var inventories = FindAll();
+
+            if (inventoryParameters.CatId != 0)
+            {
+                inventories = inventories.Where(p => p.Product.Category.CategoryId == inventoryParameters.CatId);
+            }
+
+            if (inventoryParameters.ColorId != 0)
+            {
+                inventories = inventories.Where(p => p.ColorId == inventoryParameters.ColorId);
+            }
+
+            if (inventoryParameters.SizeId != 0)
+            {
+                inventories = inventories.Where(p => p.SizeId == inventoryParameters.SizeId);
+            }
+            SearchByName(ref inventories, inventoryParameters.ProductName);
+            return inventories;
         }
 
         public IEnumerable<Color> GetColorByProductId(int productId)
@@ -42,14 +59,32 @@ namespace Repositories.Repository
         public PagedList<Inventory> GetInventories(InventoryParameters inventoryParameters)
         {
             var inventories = FindAll();
+
+            if (inventoryParameters.CatId != 0)
+            {
+                inventories = inventories.Where(p => p.Product.Category.CategoryId == inventoryParameters.CatId);
+            }
+
+            if (inventoryParameters.ColorId != 0)
+            {
+                inventories = inventories.Where(p => p.ColorId == inventoryParameters.ColorId);
+            }
+
+            if (inventoryParameters.SizeId != 0)
+            {
+                inventories = inventories.Where(p => p.SizeId == inventoryParameters.SizeId);
+            }
+            SearchByName(ref inventories, inventoryParameters.ProductName);
+
             return PagedList<Inventory>.ToPagedList(inventories.Include(p => p.Product).ThenInclude(p => p.Category).Include(s => s.Size).Include(c => c.Color),
-                     inventoryParameters.PageNumber,
-                     inventoryParameters.PageSize);
+                         inventoryParameters.PageNumber,
+                         inventoryParameters.PageSize);
         }
+
 
         public Inventory GetInventoryDetails(int InventoryId)
         {
-            return FindByCondition(i => i.Id.Equals(InventoryId)).FirstOrDefault();
+            return FindByCondition(i => i.Id.Equals(InventoryId)).Include(p => p.Product).ThenInclude(p => p.Category).Include(s => s.Size).Include(c => c.Color).FirstOrDefault();
         }
 
        
@@ -57,6 +92,18 @@ namespace Repositories.Repository
         public void UpdateInventory(Inventory Inventory)
         {
             Update(Inventory);
+        }
+
+        public List<Inventory> GetAllInventories()
+        {
+            var inventories = FindAll();
+            return inventories.ToList();
+        }
+        private void SearchByName(ref IQueryable<Inventory> inventories, string productName)
+        {
+            if (!inventories.Any() || string.IsNullOrWhiteSpace(productName))
+                return;
+            inventories = inventories.Where(o => o.Product.Name.ToLower().Contains(productName.Trim().ToLower()));
         }
     }
 }
