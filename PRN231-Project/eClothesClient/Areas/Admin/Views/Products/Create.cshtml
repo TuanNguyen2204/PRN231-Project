@@ -1,0 +1,57 @@
+﻿@model BusinessObjects.DTOs.ProductCreateUpdateDTO
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-primary">Add new product</h1>
+@if (@ViewData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @ViewData["Message"]
+    </div>
+}
+<hr />
+<div class="row container-fluid">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" type="number" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Image">
+                    @if (Model != null && !string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="@Url.Content("~/" + Model.Image)" />
+                    }
+                </label>
+                <input asp-for="@Model.Image" name="imgFile" type="file" accept="image/*" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.CategoryId">Category:</label><br />
+                <select asp-for="@Model.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="m-2">
+    <a asp-action="Index">Back to List</a>
+</div>

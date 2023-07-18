@@ -1,0 +1,181 @@
+﻿﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <h2 class="text-center alert-primary text-info">Clothes Shop Statistic</h2>
+    <h4 class="text-danger m-5">Revenue By Month</h4>
+    <div>
+        <canvas style="width:100%" id="myChart1"></canvas>
+    </div>
+    <h4 class="text-danger m-5">Top 5 Best Sellers</h4>
+    <div>
+        <canvas style="width:100%" id="myChart2"></canvas>
+    </div>
+    <h4 class="text-danger m-5">Top 5 Users</h4>
+    <div>
+        <canvas style="width:100%" id="myChart3"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const ctx = document.getElementById('myChart1');
+
+        fetch('https://localhost:7115/api/Dashboard/RevenueMonths') // Replace 'API_ENDPOINT_URL' with the actual URL of your API
+            .then(response => response.json())
+            .then(data => {
+                //const labels1 = Utils.months({ count: 12 });
+                const labels = data.map(x => `${x.month}.${x.year}`);
+                const revenue = data.map(x => x.revenueMonth);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Revenue',
+                            data: revenue,
+                            borderWidth: 3,
+                            borderColor: 'rgb(75, 192, 192)',
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+        const ctx2 = document.getElementById('myChart2');
+        fetch('https://localhost:7115/api/Dashboard/Top5BestSelers') // Replace 'API_ENDPOINT_URL' with the actual URL of your API
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(x => x.productName);
+                const counts = data.map(x => x.count);
+
+                new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Quantity',
+                            data: counts,
+                            borderWidth: 1,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                            ]
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                left: 10,
+                                right: 10,
+                                top: 0,
+                                bottom: 0
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        barPercentage: 0.5,
+                        categoryPercentage: 0.5
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+
+        const ctx3 = document.getElementById('myChart3');
+
+        fetch('https://localhost:7115/api/Dashboard/Top5Users') // Replace 'API_ENDPOINT_URL' with the actual URL of your API
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(x => x.username);
+                const totalpayments = data.map(x => x.totalBill);
+
+                new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Payments',
+                            data: totalpayments,
+                            borderWidth: 1,
+                             backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                            ]
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                left: 10,
+                                right: 10,
+                                top: 0,
+                                bottom: 0
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        barPercentage: 0.5,
+                        categoryPercentage: 0.5
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+    </script>
+
+</div>

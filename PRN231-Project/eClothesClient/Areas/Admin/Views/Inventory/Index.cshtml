@@ -1,0 +1,167 @@
+﻿@using BusinessObjects.DTOs;
+@using BusinessObjects.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var categories = ViewBag.Categories as IEnumerable<CategoryDTO>;
+    var colors = ViewBag.Colors as IEnumerable<ColorDTO>;
+    var sizes = ViewBag.Sizes as IEnumerable<SizeDTO>;
+    var inventories = ViewBag.Inventories as IEnumerable<InventoryDTO>;
+    var paginationMetadata = ViewBag.PaginationMetadata as PaginationMetadata;
+    var selectedCategory = "0"; // Default value if CatId is not present or not a valid integer
+    var selectedColor = "0"; // Default value if CatId is not present or not a valid integer
+    var selectedSize = "0"; // Default value if CatId is not present or not a valid integer
+
+    if (int.TryParse(Context.Request.Query["CatId"].ToString(), out int categoryId))
+    {
+        // If CatId is present and successfully parsed to an integer, use its value
+        selectedCategory = categoryId.ToString();
+    }
+    if (int.TryParse(Context.Request.Query["ColorId"].ToString(), out int colorId))
+    {
+        // If CatId is present and successfully parsed to an integer, use its value
+        selectedColor = colorId.ToString();
+    }
+    if (int.TryParse(Context.Request.Query["SizeId"].ToString(), out int sizeId))
+    {
+        // If CatId is present and successfully parsed to an integer, use its value
+        selectedSize = sizeId.ToString();
+    }
+}
+
+<div class="container-fluid">
+
+    <h1 class="text-danger">Inventory Management</h1>
+    <form asp-controller="Inventory" asp-action="Index" method="get" class="my-4">
+        <div class="row">
+            <div class="col-md-4 mb-3 d-flex">
+                <label for="ProductName" class="form-label m-1 w-50">Product name</label>
+                <input type="text" name="ProductName" value="@Context.Request.Query["ProductName"]" class="form-control">
+            </div>
+            <div class="col-md-2 mb-3 d-flex">
+                <label class="form-label m-1">Category</label><br />
+                <select name="CatId" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var item in categories)
+                    {
+                            <option value="@item.CategoryId" selected="@(Int32.Parse(selectedCategory) ==  item.CategoryId ? "selected" : null)">
+                            @item.CategoryName
+                            </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3 d-flex">
+                <label class="form-label m-1">Color</label><br />
+                <select name="ColorId" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var item in colors)
+                    {
+                        <option value="@item.ColorId" selected="@(Int32.Parse(selectedColor) ==  item.ColorId ? "selected" : null)">
+                            @item.ColorName
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-3 d-flex">
+                <label class="form-label m-1">Size</label><br />
+                <select name="SizeId" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var item in sizes)
+                    {
+                            <option value="@item.SizeId" selected="@(Int32.Parse(selectedSize) ==  item.SizeId ? "selected" : null)">
+                            @item.SizeName
+                            </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2 mb-3 ">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+
+    </form>
+        <button class="btn btn-primary w-20 mb-3">
+        <a class="text-decoration-none text-white" asp-controller="Inventory" asp-action="ExportExcel" asp-route-catid="@selectedCategory" asp-route-colorid="@selectedColor" asp-route-sizeid="@selectedSize" asp-route-productname="@Context.Request.Query["ProductName"]">Export to Excel</a>
+        </button>
+    <div class="mb-2">
+        <a class="text-decoration-none font-weight-bold" asp-controller="Inventory" asp-action="Create">New</a>
+    </div>
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Size
+                </th>
+                <th>
+                    Color
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Category
+                </th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inventory in inventories)
+            {
+                    <tr>
+                        <td>
+                        @inventory.Id
+                        </td>
+                        <td>
+                        @inventory.ProductName
+                        </td>
+                        <td>
+                        @inventory.SizeName
+                        </td>
+                        <td>
+                        @inventory.ColorName
+                        </td>
+                    <td>
+                        @inventory.Quantity
+                    </td>
+                        <td>
+                        @inventory.CategoryName
+                        </td>
+                        <td>
+                            <a class="text-decoration-none font-weight-bold" asp-action="Edit" asp-route-id="@inventory.Id">Edit</a> |
+                        <a class="text-decoration-none font-weight-bold" asp-action="Delete" asp-route-id="@inventory.Id" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+    @if (paginationMetadata != null)
+    {
+            <div class="btn-group-page" style="align-items">
+            @if (paginationMetadata.CurrentPage > 1)
+            {
+                <a class="btn btn-default" href="@Url.Action("Index", new { CatId= selectedCategory, ColorId = selectedColor, SizeId = selectedSize, ProductName = Context.Request.Query["ProductName"], pageNumber = paginationMetadata.CurrentPage - 1, pageSize = paginationMetadata.PageSize })"><i class="fa fa-angle-left"></i></a>
+            }
+            @for (var i = 1; i <= paginationMetadata.TotalPages; i++)
+            {
+                <a class="btn @(paginationMetadata.CurrentPage == i ? "btn-primary" : "btn-default")" href="@Url.Action("Index", new { CatId = selectedCategory, ColorId = selectedColor, SizeId = selectedSize,ProductName = Context.Request.Query["ProductName"], pageNumber = i, pageSize = paginationMetadata.PageSize })">@i</a>
+            }
+            @if (paginationMetadata.CurrentPage < paginationMetadata.TotalPages)
+            {
+                <a class="btn btn-default" href="@Url.Action("Index", new { CatId= selectedCategory, ColorId = selectedColor, SizeId = selectedSize, ProductName = Context.Request.Query["ProductName"], pageNumber = paginationMetadata.CurrentPage + 1, pageSize = paginationMetadata.PageSize })"><i class="fa fa-angle-right"></i></a>
+            }
+            </div>
+    }
+
+</div>

@@ -9,6 +9,7 @@ namespace eClothesAPI.AutoMapper
     {
         public MappingProfile() {
             CreateMap<Color, ColorDTO>();
+            CreateMap<Size, SizeDTO>();
             CreateMap<Product, ProductDTO>()
                 .ForMember(dest => dest.CategoryName,
                 opt => opt.MapFrom(src => src.Category.CategoryName));
