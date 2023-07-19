@@ -26,28 +26,6 @@ namespace Repositories.Repository
             Delete(Inventory);
         }
 
-        public IEnumerable<Inventory> ExportExel(InventoryParameters inventoryParameters)
-        {
-            var inventories = FindAll();
-
-            if (inventoryParameters.CatId != 0)
-            {
-                inventories = inventories.Where(p => p.Product.Category.CategoryId == inventoryParameters.CatId);
-            }
-
-            if (inventoryParameters.ColorId != 0)
-            {
-                inventories = inventories.Where(p => p.ColorId == inventoryParameters.ColorId);
-            }
-
-            if (inventoryParameters.SizeId != 0)
-            {
-                inventories = inventories.Where(p => p.SizeId == inventoryParameters.SizeId);
-            }
-            SearchByName(ref inventories, inventoryParameters.ProductName);
-            return inventories;
-        }
-
         public IEnumerable<Color> GetColorByProductId(int productId)
         {
             return FindByCondition(i => i.ProductId.Equals(productId)).Select(inv => inv.Color).Distinct();

@@ -58,6 +58,31 @@ namespace eClothesClient.Configuration
             worksheet.Columns().AdjustToContents();
             return workbook;
         }
+        public static XLWorkbook exportUser(List<UserDTO> listUsers, XLWorkbook workbook)
+        {
+            var worksheet = workbook.Worksheets.Add("Users");
+            worksheet.Cell(1, 1).Value = "CLOTHES SHOP";
+            worksheet.Cell(2, 1).Value = "LIST OF Users";
+            var currentRow = 3;
+            worksheet.Cell(currentRow, 1).Value = "UserId";
+            worksheet.Cell(currentRow, 2).Value = "User name";
+            worksheet.Cell(currentRow, 3).Value = "Email";
+            worksheet.Cell(currentRow, 4).Value = "Address";
+            worksheet.Cell(currentRow, 5).Value = "Role";
+            foreach (var user in listUsers)
+            {
+                currentRow++;
+                worksheet.Cell(currentRow, 1).Value = user.Id;
+                worksheet.Cell(currentRow, 2).Value = user.Name;
+                worksheet.Cell(currentRow, 3).Value = user.Email;
+                worksheet.Cell(currentRow, 4).Value = user.Address;
+                worksheet.Cell(currentRow, 5).Value = user.IsSeller ? "Seller" : "Customer";
+
+            }
+            // Auto-fit columns after adding data
+            worksheet.Columns().AdjustToContents();
+            return workbook;
+        }
 
     }
 }

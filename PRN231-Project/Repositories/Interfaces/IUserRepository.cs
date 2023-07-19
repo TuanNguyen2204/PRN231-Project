@@ -15,6 +15,6 @@ namespace Repositories.Interfaces
         User GetUserById(int userId);
         void UpdateUser(User user);
         void DeleteUser(User User);
-        IEnumerable<User> ExportExel();
+        void CreateUser(User User);
     }
 }

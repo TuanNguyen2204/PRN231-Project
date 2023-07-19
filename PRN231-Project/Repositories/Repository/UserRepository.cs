@@ -21,13 +21,6 @@ namespace Repositories.Repository
             Delete(User);
         }
 
-        public IEnumerable<User> ExportExel()
-        {
-            return FindAll()
-                 .OrderBy(u => u.Name)
-                 .ToList();
-        }
-
         public User GetUserById(int userId)
         {
             return FindByCondition(u => u.Id.Equals(userId)).FirstOrDefault();
@@ -37,7 +30,7 @@ namespace Repositories.Repository
         {
             var users = FindAll();
             SearchByName(ref users, UserParameters.Name);
-            return PagedList<User>.ToPagedList(users.OrderBy(u => u.Username),
+            return PagedList<User>.ToPagedList(users,
                     UserParameters.PageNumber,
                     UserParameters.PageSize);
         }
@@ -51,6 +44,11 @@ namespace Repositories.Repository
         public void UpdateUser(User user)
         {
             Update(user);
+        }
+
+        public void CreateUser(User User)
+        {
+           Create(User);
         }
     }
 }

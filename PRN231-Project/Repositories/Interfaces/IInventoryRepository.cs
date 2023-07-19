@@ -16,7 +16,6 @@ namespace Repositories.Interfaces
         void UpdateInventory(Inventory Inventory);
         void DeleteInventory(Inventory Inventory);
         List<Inventory> GetAllInventories();
-        IEnumerable<Inventory> ExportExel(InventoryParameters inventoryParameters);
 
         IEnumerable<Color> GetColorByProductId(int productId);
 

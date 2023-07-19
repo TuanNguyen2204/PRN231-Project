@@ -33,9 +33,8 @@ namespace eClothesClient.Areas.Admin.Controllers
             ProductApiUrl = "https://localhost:7115/api/Products/GetProducts";
         }
 
-        public async Task<IActionResult> Index(int? CatId, int? ColorId, int? SizeId, string? ProductName,  int PageNumber = 1, int PageSize = 3)
+        public async Task<IActionResult> Index(int? CatId, int? ColorId, int? SizeId, string? ProductName,  int PageNumber = 1, int PageSize = 10)
         {
-
             var apiUrl = InventoryApiUrl + $"?&PageNumber={PageNumber}&PageSize={PageSize}";
 
             if (CatId.HasValue)
