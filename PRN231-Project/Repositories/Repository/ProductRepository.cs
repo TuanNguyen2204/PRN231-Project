@@ -80,16 +80,5 @@ namespace Repositories.Repository
             Update(product);
         }
 
-        public IEnumerable<Product> ExportExel(ProductParameters productParameters)
-        {
-            var products = FindAll();
-            if (productParameters.CatId != 0)
-            {
-                products = FindByCondition(p => p.CategoryId == productParameters.CatId);
-            }
-            SearchByName(ref products, productParameters.ProductName);
-            OrderByPrice(ref products, productParameters.OrderBy);
-            return products.Include(x=> x.Category).ToList();
-        }
     }
 }
