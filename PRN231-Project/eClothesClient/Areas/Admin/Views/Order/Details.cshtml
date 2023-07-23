@@ -1,0 +1,73 @@
+﻿@using BusinessObjects.DTOs;
+@using BusinessObjects.Enums;
+@using BusinessObjects.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var orderDetails = ViewBag.OrderDetails as IEnumerable<OrderDetailDTO>;
+}
+
+<div class="container-fluid">
+
+    <h1 class="text-danger">Order Details</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Size
+                </th>
+                <th>
+                    Color
+                </th>
+                <th>
+                    Quantity
+                </th>
+
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orderDetails)
+            {
+                <tr>
+                    <td>
+                        @order.ProductName
+                    </td>
+                    <td>
+                        @order.SizeName
+                    </td>
+                    <td>
+                        @order.ColorName
+                    </td>
+                    <td>
+                        @order.Quantity
+                    </td>
+                    <td>
+                        @order.Price
+                    <td>
+                            @{
+                                var total = order.Quantity * order.Price;
+                            }
+                            @total
+                    </td>
+
+                </tr>
+            }
+            <tr>
+                    <td colspan="3" class="text-right font-weight-bold">
+                        Total Amount: @{
+                        // Calculate the total amount by summing up the individual order totals
+                        var totalAmount = orderDetails.Sum(order => order.Quantity * order.Price);
+                        @totalAmount
+                    }
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+     <a asp-action="Index" class="btn btn-info text-light">Back to list orders</a>
+
+</div>

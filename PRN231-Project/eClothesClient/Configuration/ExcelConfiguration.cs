@@ -84,5 +84,31 @@ namespace eClothesClient.Configuration
             return workbook;
         }
 
+        public static XLWorkbook exportOrder(List<OrderDTO> listOrders, XLWorkbook workbook)
+        {
+            var worksheet = workbook.Worksheets.Add("Orders");
+            worksheet.Cell(1, 1).Value = "CLOTHES SHOP";
+            worksheet.Cell(2, 1).Value = "LIST OF Orders";
+            var currentRow = 3;
+            worksheet.Cell(currentRow, 1).Value = "Id";
+            worksheet.Cell(currentRow, 2).Value = "User name";
+            worksheet.Cell(currentRow, 3).Value = "Total Quantity";
+            worksheet.Cell(currentRow, 4).Value = "Orderd Date";
+            worksheet.Cell(currentRow, 5).Value = "Total Price";
+            foreach (var order in listOrders)
+            {
+                currentRow++;
+                worksheet.Cell(currentRow, 1).Value = order.Id;
+                worksheet.Cell(currentRow, 2).Value = order.Username;
+                worksheet.Cell(currentRow, 3).Value = order.Quantity;
+                worksheet.Cell(currentRow, 4).Value = order.DateOrdered;
+                worksheet.Cell(currentRow, 5).Value = order.TotalPrice;
+
+            }
+            // Auto-fit columns after adding data
+            worksheet.Columns().AdjustToContents();
+            return workbook;
+        }
+
     }
 }

@@ -50,6 +50,33 @@ namespace eClothesAPI.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+
+        public IActionResult GetOrderById(int id)
+        {
+            try
+            {
+                var order = _repository.Order.GetOrderDetails(id);
+                if (order == null)
+                {
+                    _logger.LogError($"Order with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned order with details for id: {id}");
+
+                    var orderResult = _mapper.Map<OrderDTO>(order);
+                    return Ok(orderResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside orderResult action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         [HttpPut("{id}")]
         public IActionResult UpdateOrder(int id, [FromBody] OrderCreateUpdateDTO OrderDto)
         {
@@ -79,27 +106,6 @@ namespace eClothesAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside UpdateOrder action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-        [HttpDelete("{id}")]
-        public IActionResult DeleteOrder(int id)
-        {
-            try
-            {
-                var Order = _repository.Order.FindByCondition(x => x.Id == id).FirstOrDefault();
-                if (Order == null)
-                {
-                    _logger.LogError($"Order with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
-                _repository.Order.DeleteOrder(Order);
-                _repository.Save();
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside DeleteOrder action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }
