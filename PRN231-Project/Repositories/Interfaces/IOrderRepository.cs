@@ -13,6 +13,6 @@ namespace Repositories.Interfaces
         PagedList<Order> GetOrders(OrderParameters OrderParameters);
         void UpdateOrder(Order Order);
         void DeleteOrder(Order Order);
-        IEnumerable<Order> ExportExel();
+        Order GetOrderDetails(int orderId);
     }
 }

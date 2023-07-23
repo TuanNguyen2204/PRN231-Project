@@ -21,11 +21,6 @@ namespace Repositories.Repository
             Delete(Order);
         }
 
-        public IEnumerable<Order> ExportExel()
-        {
-            return FindAll().Include(x=>x.User).ToList();
-        }
-
         public PagedList<Order> GetOrders(OrderParameters OrderParameters)
         {
             var orders = FindAll();
@@ -43,6 +38,11 @@ namespace Repositories.Repository
         public void UpdateOrder(Order Order)
         {
             Update(Order);
+        }
+
+        public Order GetOrderDetails(int orderId)
+        {
+            return FindByCondition(o => o.Id == orderId).Include(x=>x.User).FirstOrDefault();
         }
     }
 }

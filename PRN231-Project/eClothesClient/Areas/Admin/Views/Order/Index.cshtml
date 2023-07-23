@@ -1,0 +1,113 @@
+﻿@using BusinessObjects.DTOs;
+@using BusinessObjects.Enums;
+@using BusinessObjects.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var orders = ViewBag.Orders as IEnumerable<OrderDTO>;
+    var paginationMetadata = ViewBag.PaginationMetadata as PaginationMetadata;
+}
+
+<div class="container-fluid">
+
+    <h1 class="text-danger">Order Management</h1>
+    <form asp-controller="Order" asp-action="Index" method="get" class="my-4">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <label for="startDate" class="form-label">Start order date</label>
+                <input type="date" name="startDate" value="@Context.Request.Query["startDate"]" class="form-control" id="startOrderDate">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="endDate" class="form-label">End order date</label>
+                <input type="date" name="endDate" value="@Context.Request.Query["endDate"]" class="form-control" id="endOrderDate">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label class="invisible">Filter</label>
+                <button class="btn btn-primary w-100" type="submit">Filter</button>
+            </div>
+           
+        </div>
+        <div class="row">
+             <div class="col-md-3 mb-3">
+                <label class="invisible">Export to Excel</label>
+                <button class="btn btn-primary w-100">
+                    <a class="text-decoration-none text-white" asp-action="ExportExcel" asp-route-startOrderDate="@Context.Request.Query["startDate"]" asp-route-endOrderDate="@Context.Request.Query["endDate"]">Export to Excel</a>
+                </button>
+            </div>
+        </div>
+
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Username
+                </th>
+                <th>
+                    Total Quantity
+                </th>
+                <th>
+                    Ordered Date
+                </th>
+                <th>
+                    Total Amount
+                </th>
+                <th>
+                    Delivery Location
+                </th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>
+                        @order.Id
+                    </td>
+                    <td>
+                        @order.Username
+                    </td>
+                    <td>
+                        @order.Quantity
+                    </td>
+                    <td>
+                        @order.DateOrdered.ToString("MM/dd/yyyy")
+                    </td>
+                    <td>
+                        @order.TotalPrice
+                    </td>
+                    <td>
+                        @order.DeliveryLocation
+                    </td>
+                    <td>
+                        <a class="text-decoration-none font-weight-bold" asp-action="Details" asp-route-id="@order.Id">Detail</a> |
+                        <a class="text-decoration-none font-weight-bold" asp-action="Edit" asp-route-id="@order.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (paginationMetadata != null)
+    {
+    <div class="btn-group-page" style="align-items">
+    @if (paginationMetadata.CurrentPage > 1)
+    {
+                <a class="btn btn-default" href="@Url.Action("Index", new { StartDate = Context.Request.Query["startDate"], EndDate = Context.Request.Query["endDate"] , pageNumber = paginationMetadata.CurrentPage - 1, pageSize = paginationMetadata.PageSize })"><i class="fa fa-angle-left"></i></a>
+    }
+    @for (var i = 1; i <= paginationMetadata.TotalPages; i++)
+    {
+                <a class="btn @(paginationMetadata.CurrentPage == i ? "btn-primary" : "btn-default")" href="@Url.Action("Index", new { StartDate = Context.Request.Query["startDate"], EndDate = Context.Request.Query["endDate"], pageNumber = i, pageSize = paginationMetadata.PageSize })">@i</a>
+    }
+    @if (paginationMetadata.CurrentPage < paginationMetadata.TotalPages)
+    {
+                <a class="btn btn-default" href="@Url.Action("Index", new { StartDate = Context.Request.Query["startDate"], EndDate = Context.Request.Query["endDate"], pageNumber = paginationMetadata.CurrentPage + 1, pageSize = paginationMetadata.PageSize })"><i class="fa fa-angle-right"></i></a>
+    }
+    </div>
+    }
+
+</div>

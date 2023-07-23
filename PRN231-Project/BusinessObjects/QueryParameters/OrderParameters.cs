@@ -12,6 +12,5 @@ namespace BusinessObjects.QueryParameters
     {
         public DateTime StartDate { get; set; } = DateTime.MinValue;
         public DateTime EndDate { get; set; } = DateTime.MaxValue;
-        public bool ValidateFilterDate => StartDate < EndDate;
     }
 }

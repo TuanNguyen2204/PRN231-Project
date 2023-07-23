@@ -1,0 +1,63 @@
+﻿@model BusinessObjects.DTOs.OrderDTO
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-primary">Edit Order</h1>
+@if (@ViewData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @ViewData["Message"]
+    </div>
+}
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" name="id"/>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" readonly />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" name="Quantity" readonly/>
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <label asp-for="PaymentMethod" class="control-label"></label>
+                <input asp-for="PaymentMethod" class="form-control" name="PaymentMethod" readonly />
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalPrice" class="control-label"></label>
+                <input asp-for="TotalPrice" class="form-control" name="TotalPrice" readonly/>
+                <span asp-validation-for="TotalPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOrdered" class="control-label"></label>
+                <input asp-for="DateOrdered" name="DateOrdered" class="form-control" />
+                <span asp-validation-for="DateOrdered" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliveryLocation" class="control-label"></label>
+                <input asp-for="DeliveryLocation" name="DeliveryLocation" class="form-control" />
+                <span asp-validation-for="DeliveryLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+           
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
