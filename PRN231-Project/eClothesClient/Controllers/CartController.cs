@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace eClothesClient.Controllers
@@ -142,7 +143,59 @@ namespace eClothesClient.Controllers
 
             return RedirectToAction("Index", "Cart");
         }
+        //public async Task<ActionResult> Order()
+        //{
+        //    //Get Account/Customer form session
+        //    //var mySessionValue = HttpContext.Session.GetString("user");
 
+        //    //if (mySessionValue == null) return RedirectToAction("Index", "Cart", new { @alertMessage = "Login to order!" });
+
+        //    //var userObject = JsonConvert.DeserializeObject<dynamic>(mySessionValue);
+        //    //var customer = userObject.account.customer;
+
+        //    string? cartsdeserialize = HttpContext.Session.GetString("Cart");
+        //    List<CartItemDTO> CartItems = JsonConvert.DeserializeObject<List<CartItemDTO>>(cartsdeserialize);
+
+        //    //Get list orderdetails
+        //    List<OrderDetailsDTO> orderDetails = new List<OrderDetailsDTO>();
+        //    decimal totalPrice = 0;
+        //    foreach (var item in CartItems)
+        //    {
+        //        var od = new OrderDetailsDTO()
+        //        {
+        //            ProductId = item.Product.Id,
+        //            SizeId = item.SizeId,
+        //            ColorId = item.ColorId,
+        //            Quantity = item.Quantity,
+        //            Price = item.Product.Price
+
+        //        };
+        //        orderDetails.Add(od);
+        //        totalPrice += od.Price;
+        //    }
+
+
+        //    OrderCreateDTO o = new OrderCreateDTO
+        //    {
+        //        UserId = 2,
+        //        DateOrdered = DateTime.Now,
+        //        PaymentMethod = "Cash offline",
+        //        DeliveryLocation = "HN",
+        //        TotalPrice = totalPrice,
+        //        OrderDetails = orderDetails
+        //    };
+
+        //    var stringContent = new StringContent(JsonConvert.SerializeObject(o), Encoding.UTF8, "application/json");
+        //    HttpResponseMessage response = await client.PostAsync("https://localhost:7115/api/Order/CreateOrder", stringContent);
+
+        //    if (!response.IsSuccessStatusCode)
+        //    {
+        //        RedirectToAction("Index", "Cart", new { @alertMessage = "Order failed!" });
+        //    }
+
+        //    HttpContext.Session.Remove("Cart");
+        //    return RedirectToAction("Index", "Order", new { @alertMessage = "Order successfully!" });
+        //}
         public int getIndexOfProductInCart(ProductDTO product, int colorId, int sizeId, List<CartItemDTO> carts)
         {
             for (int i = 0; i < carts.Count; i++)

@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Models;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,13 @@ namespace Repositories.Repository
         private IInventoryRepository _inventoryRepository;
         private IOrderRepository _orderRepository;
         private IOrderDetailRepository _orderDetailRepository;
+      
 
         public RepositoryWrapper(ClothesStoreContext context)
         {
             _context = context;
         }
-
+       
         public IColorRepository Color
         {
             get

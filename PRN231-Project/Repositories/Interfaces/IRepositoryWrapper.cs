@@ -15,6 +15,7 @@ namespace Repositories.Interfaces
         IInventoryRepository Inventory { get; } 
         IOrderRepository Order { get; }
         IOrderDetailRepository OrderDetail { get; }
+
         void Save();
     }
 }
