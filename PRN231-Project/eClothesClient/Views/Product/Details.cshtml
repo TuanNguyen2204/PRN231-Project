@@ -19,8 +19,8 @@
             <div class="row">
                 <div style="text-align: left;" class="col-lg-12">
                     <div class="product__details__breadcrumb">
-                        <a href="./index.html">Home</a>
-                        <a href="./shop.html">Shop</a>
+                        <a href="/Home/Index">Home</a>
+                        <a href="/Product/Index">Shop</a>
                         <span>Product Details</span>
                     </div>
                 </div>
@@ -334,7 +334,7 @@
             var quantity = parseInt(document.querySelector('.pro-qty input[type="text"]').value);
             // Validate that both color and size are selected
             if (!selectedColorId || !selectedSizeId) {
-                alert("Please select a color and size.");
+                alert("Please select a size.");
                 return;
             }
 
