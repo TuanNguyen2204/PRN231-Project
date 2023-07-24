@@ -1,0 +1,129 @@
+﻿﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Login</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+
+    <!-- Custom styles for this template-->
+    <link href="~/Admin/css/sb-admin-2.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-info">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                    </div>
+                                    <div class="user">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user"
+                                                   id="username" aria-describedby="emailHelp"
+                                                   placeholder="Enter User Name...">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                   id="password" placeholder="Password">
+                                        </div>
+                                        <button onclick="Login()" class="btn btn-info btn-user btn-block">
+                                            Login
+                                        </button>
+                                        <hr>
+                                        <div class="text-center text-danger font-weight-bolder" id="message"></div>
+                                    </div>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="~/Register">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>
+<script>
+    const Login = () => {
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var data = {
+            username: username,
+            password: password,
+        };
+
+        // Make the AJAX request
+        $.ajax({
+            url: 'https://localhost:7115/api/Login/Login',
+            method: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                document.cookie = `access_token=${response}; expires=${new Date(Date.now() + 3600000)}; secure; sameSite=strict`;
+
+                // Redirect based on the user's role
+                var decodedToken = parseJwt(response);
+                var userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+                if (userRole === 'Admin') {
+                    window.location.href = 'https://localhost:7236/Admin/Dashboard';
+                } else if (userRole === 'User') {
+                    window.location.href = 'https://localhost:7236/Home';
+                } else {
+                    console.log('Unknown role: ' + userRole);
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#message').text('Username or Password invalid!');
+            }
+        });
+    }
+
+    function parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    }
+</script>
+

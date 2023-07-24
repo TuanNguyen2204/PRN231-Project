@@ -9,11 +9,13 @@ namespace eClothesAPI.AutoMapper
     {
         public MappingProfile() {
             CreateMap<Color, ColorDTO>();
+            CreateMap<Size, SizeDTO>();
             CreateMap<Product, ProductDTO>()
                 .ForMember(dest => dest.CategoryName,
                 opt => opt.MapFrom(src => src.Category.CategoryName));
             CreateMap<ProductCreateUpdateDTO, Product>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UserCreateDTO>().ReverseMap();
             CreateMap<Inventory, InventoryDTO>()
                 .ForMember(dest => dest.ProductName,
                 opt => opt.MapFrom(src => src.Product.Name))

@@ -40,9 +40,15 @@ namespace Repositories.Repository
                 products = FindByCondition(p => p.CategoryId == productParameters.CatId);
             }
             SearchByName(ref products, productParameters.ProductName);
-            return PagedList<Product>.ToPagedList(products.OrderBy(p => p.Name).Include(x => x.Category),
+            OrderByPrice(ref products, productParameters.OrderBy);
+            return PagedList<Product>.ToPagedList(products.Include(x => x.Category),
                     productParameters.PageNumber,
                     productParameters.PageSize);
+        }
+        public List<Product> GetAllProducts()
+        {
+            var products = FindAll();
+            return products.ToList();
         }
         private void SearchByName(ref IQueryable<Product> products, string productName)
         {
@@ -50,16 +56,29 @@ namespace Repositories.Repository
                 return;
             products = products.Where(o => o.Name.ToLower().Contains(productName.Trim().ToLower()));
         }
+        private void OrderByPrice(ref IQueryable<Product> products, string orderby)
+        {
+            if (!products.Any() || string.IsNullOrWhiteSpace(orderby))
+                return;
+
+            switch (orderby.ToLower())
+            {
+                case "price-desc":
+                    products = products.OrderByDescending(o => o.Price);
+                    break;
+                case "price-increase":
+                    products = products.OrderBy(o => o.Price);
+                    break;
+                default:
+                    // Handle the default case, such as not applying any sorting
+                    break;
+            }
+        }
+
         public void UpdateProduct(Product product)
         {
             Update(product);
         }
 
-        public IEnumerable<Product> ExportExel()
-        {
-            return FindAll().Include(x => x.Category)
-                  .OrderBy(p => p.Name)
-                  .ToList();
-        }
     }
 }

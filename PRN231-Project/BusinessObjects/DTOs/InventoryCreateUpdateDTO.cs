@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace BusinessObjects.DTOs
         public int ProductId { get; set; }
         public int SizeId { get; set; }
         public int ColorId { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "Please enter a valid quantity.")]
         public int Quantity { get; set; }
         public override bool Equals(object obj)
         {

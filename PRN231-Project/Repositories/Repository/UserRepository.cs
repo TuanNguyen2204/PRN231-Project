@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Models;
+﻿using BusinessObjects.DTOs;
+using BusinessObjects.Models;
 using BusinessObjects.QueryParameters;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
@@ -21,13 +22,6 @@ namespace Repositories.Repository
             Delete(User);
         }
 
-        public IEnumerable<User> ExportExel()
-        {
-            return FindAll()
-                 .OrderBy(u => u.Name)
-                 .ToList();
-        }
-
         public User GetUserById(int userId)
         {
             return FindByCondition(u => u.Id.Equals(userId)).FirstOrDefault();
@@ -37,7 +31,7 @@ namespace Repositories.Repository
         {
             var users = FindAll();
             SearchByName(ref users, UserParameters.Name);
-            return PagedList<User>.ToPagedList(users.OrderBy(u => u.Username),
+            return PagedList<User>.ToPagedList(users,
                     UserParameters.PageNumber,
                     UserParameters.PageSize);
         }
@@ -51,6 +45,22 @@ namespace Repositories.Repository
         public void UpdateUser(User user)
         {
             Update(user);
+        }
+
+        public void CreateUser(User User)
+        {
+           Create(User);
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            return FindByCondition(u => u.Email.Equals(email)).FirstOrDefault();
+        }
+
+        public User Login(LoginModel loginModel)
+        {
+            return FindByCondition(u => u.Username.Equals(loginModel.Username) && u.Password.Equals(loginModel.Password)).FirstOrDefault();
+
         }
     }
 }

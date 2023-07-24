@@ -14,6 +14,6 @@ namespace Repositories.Interfaces
         void CreateOrder(Order Order);
         void UpdateOrder(Order Order);
         void DeleteOrder(Order Order);
-        IEnumerable<Order> ExportExel();
+        Order GetOrderDetails(int orderId);
     }
 }

@@ -13,6 +13,7 @@ namespace Repositories.Repository
     {
         private ClothesStoreContext _context;
         private IColorRepository _colorRepository;
+        private ISizeRepository _sizeRepository;
         private IProductRepository _productRepository;
         private ICategoryRepository _categoryRepository;
         private IUserRepository _userRepository;
@@ -106,6 +107,18 @@ namespace Repositories.Repository
                     _orderDetailRepository = new OrderDetailRepository(_context);
                 }
                 return _orderDetailRepository;
+            }
+        }
+
+        public ISizeRepository Size
+        {
+            get
+            {
+                if (_sizeRepository == null)
+                {
+                    _sizeRepository = new SizeRepository(_context);
+                }
+                return _sizeRepository;
             }
         }
 
