@@ -49,5 +49,14 @@ namespace Repositories.Repository
             return FindByCondition(o => o.Id == orderId).Include(x=>x.User).FirstOrDefault();
         }
 
+        public List<Order> GetOrderByUserId(int userid)
+        {
+            return FindByCondition(o => o.UserId == userid).Include(x => x.User).Include(o => o.OrderDetails)
+            .ThenInclude(od => od.Product)
+        .Include(o => o.OrderDetails)
+            .ThenInclude(od => od.Size)
+        .Include(o => o.OrderDetails)
+            .ThenInclude(od => od.Color).Include(o => o.OrderDetails).OrderByDescending(x => x.DateOrdered).ToList();
+        }
     }
 }

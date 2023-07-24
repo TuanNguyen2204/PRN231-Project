@@ -15,5 +15,6 @@ namespace Repositories.Interfaces
         void UpdateOrder(Order Order);
         void DeleteOrder(Order Order);
         Order GetOrderDetails(int orderId);
+        List<Order> GetOrderByUserId(int userid);
     }
 }

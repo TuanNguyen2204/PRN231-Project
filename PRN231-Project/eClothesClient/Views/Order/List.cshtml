@@ -1,0 +1,81 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using BusinessObjects.DTOs
+@model List<OrderListDTO>
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>My Orders</h4>
+                    <div class="breadcrumb__links">
+                        <a href="./index.html">Home</a>
+                        <a href="./shop.html">Order</a>
+                        <span>My Orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="chit-chat-layer1 mt-5">
+    <div class="col-md-12 col-lg-12">
+        <div class="col-md-12 col-lg-12">
+            <div class="work-progres">
+
+                @foreach (var item in Model)
+                {
+                    <div style="width:80%; margin-left:auto; margin-right:auto; border-style: groove; border-radius: 10px; margin-bottom:20px;">
+                        <div style="background-color:#f3f2ee;" class="p-4">
+                            <h5 style="font-weight:bold;">Order Id: #@Html.DisplayFor(modelItem => item.Id)</h5>
+                            <h5 style="font-weight:bold;">Order Date: @Html.DisplayFor(modelItem => item.DateOrdered)</h5>
+                            <h5 style="font-weight:bold;">Email: @Html.DisplayFor(modelItem => item.Email)</h5>
+                            <h5 style="font-weight:bold;">Ship Address: @Html.DisplayFor(modelItem => item.Address)</h5>
+                            <h5 style="font-weight:bold;">Notes: @Html.DisplayFor(modelItem => item.DeliveryLocation)</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Product Image</th>
+                                        <th>Product Name</th>
+                                        <th>Color Name</th>
+                                        <th>Size Name</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var od in @item.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td><img style="width:80px;height:100px" src="~/@od.ProductImage" /></td>
+                                            <td>@od.ProductName</td>
+                                            <td>@od.ColorName</td>
+                                            <td>@od.SizeName</td>
+                                            <td>@od.Quantity</td>
+                                            <td>$@(@od.Price * @od.Quantity)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <div class="pb-3 pt-2" style="
+    display: flex;
+    justify-content: flex-end;
+
+    padding-right: 20px;
+    margin-right: 50px;">
+                            <h5 style="font-weight:650">Total Price: $@(item.OrderDetails.Sum(od => od.Price * od.Quantity))</h5>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="clearfix"> </div>
+    </div>

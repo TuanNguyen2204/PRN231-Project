@@ -60,12 +60,12 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="checkout__order">
                                 <h4 class="order__title">Your order</h4>
-                                <div class="checkout__order__products">Product<span>Quantity</span><span>Total</span></div>
+                                <div class="checkout__order__products">Product<span>Total</span></div>
                                 <ul class="checkout__total__products">
                                      @foreach (var item in Model)
                                 {
-                                    <li>@item.Product.Name<span>@item.Quantity</span> <span>$ @item.Product.Price</span></li>
-                                        @item.ColorId @item.SizeId
+                                        <li>@item.Product.Name<span> @item.Quantity x $@item.Product.Price </span></li>
+                                        
                                     }
                                 </ul>
                                 <ul class="checkout__total__all">
