@@ -1,10 +1,12 @@
 ﻿using BusinessObjects.DTOs;
+using BusinessObjects.Models;
 using DocumentFormat.OpenXml.Office.CustomUI;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.Xml;
 using System.Text;
+using System.Text.Json;
 
 namespace eClothesClient.Controllers
 {
@@ -23,6 +25,34 @@ namespace eClothesClient.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
 
 
+        }
+
+        public async Task<IActionResult> List()
+        {
+            //var mySessionValue = HttpContext.Session.GetString("user");
+            //var userObject = JsonConvert.DeserializeObject<dynamic>(mySessionValue);
+            //var customerId = userObject.account.customerId;
+            //Get list order
+            var customerId = 2;
+            HttpResponseMessage ordersResponse = await client.GetAsync("https://localhost:7115/api/Order/GetOrderByUserId/" + customerId);
+            string strOrders = await ordersResponse.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<OrderListDTO>? listOrders = JsonConvert.DeserializeObject<List<OrderListDTO>>(strOrders);
+           
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = new List<CartItemDTO>();
+
+            if (!string.IsNullOrEmpty(cartJson))
+            {
+                cart = JsonConvert.DeserializeObject<List<CartItemDTO>>(cartJson);
+            }
+            total = GetTotal(cart);
+            ViewData["total"] = total;
+            GetCartCount();
+            return View(listOrders);
         }
         public IActionResult GetCartCount()
         {
