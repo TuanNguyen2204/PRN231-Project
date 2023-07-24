@@ -95,20 +95,17 @@
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
-                            <li><a href="./shop.html">Shop</a></li>
-                            <li>
-                                <a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="./about.html">About Us</a></li>
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
+                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-controller="Product" asp-action="Index">Shop</a></li>
+                            <!-- ... rest of the menu items ... -->
+
+                           
                             <li><a href="./blog.html">Blog</a></li>
                             <li><a href="./contact.html">Contacts</a></li>
+                             <li>
+                                <a asp-controller="Order" asp-action="List">My Orders</a>
+                               
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -210,7 +207,22 @@
         </div>
     </div>
 
-   
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Get the current URL path
+            var path = window.location.pathname;
+
+            // Find the corresponding <li> tag with matching href and add the "active" class
+            $('.header__menu li a[href="' + path + '"]').parent('li').addClass('active');
+        });
+    </script>
+
+
+
+
+
+
 
 
     <!-- Search End -->

@@ -1,5 +1,8 @@
-﻿using eClothesClient.Models;
+﻿using BusinessObjects.DTOs;
+using DocumentFormat.OpenXml.Vml;
+using eClothesClient.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace eClothesClient.Controllers
@@ -7,7 +10,7 @@ namespace eClothesClient.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
+        public static decimal? total = 0;
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -15,8 +18,49 @@ namespace eClothesClient.Controllers
 
         public IActionResult Index()
         {
+           
+
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = new List<CartItemDTO>();
+
+            if (!string.IsNullOrEmpty(cartJson))
+            {
+                cart = JsonConvert.DeserializeObject<List<CartItemDTO>>(cartJson);
+            }
+            total = GetTotal(cart);
+            ViewData["total"] = total;
+            GetCartCount();
             return View();
         }
+        public IActionResult GetCartCount()
+        {
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = new List<CartItemDTO>();
+
+            if (!string.IsNullOrEmpty(cartJson))
+            {
+                cart = JsonConvert.DeserializeObject<List<CartItemDTO>>(cartJson);
+            }
+
+            var count = cart.Count();
+            ViewData["cartcount"] = count;
+            if (count == 0)
+            {
+                ViewData["cartcount"] = 0;
+            }
+
+            return Ok(count);
+        }
+        public decimal? GetTotal(List<CartItemDTO> carts)
+        {
+            total = 0;
+            foreach (CartItemDTO cart in carts)
+            {
+                total += cart.Product.Price * cart.Quantity;
+            }
+            return total;
+        }
+    
 
         public IActionResult Privacy()
         {
