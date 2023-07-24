@@ -15,7 +15,10 @@ namespace Repositories.Repository
         public OrderRepository(ClothesStoreContext ClothesStoreContext) : base(ClothesStoreContext)
         {
         }
-
+        public void CreateOrder(Order Order)
+        {
+            Create(Order);
+        }
         public void DeleteOrder(Order Order)
         {
             Delete(Order);
@@ -40,9 +43,11 @@ namespace Repositories.Repository
             Update(Order);
         }
 
+
         public Order GetOrderDetails(int orderId)
         {
             return FindByCondition(o => o.Id == orderId).Include(x=>x.User).FirstOrDefault();
         }
+
     }
 }

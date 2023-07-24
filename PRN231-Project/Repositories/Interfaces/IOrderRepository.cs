@@ -11,6 +11,7 @@ namespace Repositories.Interfaces
     public interface IOrderRepository : IRepositoryBase<Order>
     {
         PagedList<Order> GetOrders(OrderParameters OrderParameters);
+        void CreateOrder(Order Order);
         void UpdateOrder(Order Order);
         void DeleteOrder(Order Order);
         Order GetOrderDetails(int orderId);

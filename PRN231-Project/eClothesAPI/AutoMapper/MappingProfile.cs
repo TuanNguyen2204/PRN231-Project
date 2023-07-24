@@ -36,6 +36,11 @@ namespace eClothesAPI.AutoMapper
                 opt => opt.MapFrom(src => src.Size.SizeName))
                  .ForMember(dest => dest.ColorName,
                 opt => opt.MapFrom(src => src.Color.ColorName));
+            CreateMap<OrderCreateDTO, Order>()
+               .ForMember(dest => dest.OrderDetails,
+               opt => opt.MapFrom(src => src.OrderDetails));
+            //CreateMap<OrderCreateDTO, Order>().ReverseMap();
+            CreateMap<OrderDetail, OrderDetailsDTO>().ReverseMap();
         }
     }
 }

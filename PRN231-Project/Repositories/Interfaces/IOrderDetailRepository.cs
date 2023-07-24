@@ -10,5 +10,7 @@ namespace Repositories.Interfaces
     public interface IOrderDetailRepository  :IRepositoryBase<OrderDetail>
     {
         List<OrderDetail> GetOrderDetails(int OrderId);
+        void CreateOrderDetail(OrderDetail OrderDetail);
+       OrderDetail GetOrderDetailByProductIdColorIdSizeId(int productId, int colorId, int sizeId);
     }
 }
