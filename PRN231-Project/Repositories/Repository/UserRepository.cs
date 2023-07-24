@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Models;
+﻿using BusinessObjects.DTOs;
+using BusinessObjects.Models;
 using BusinessObjects.QueryParameters;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
@@ -49,6 +50,17 @@ namespace Repositories.Repository
         public void CreateUser(User User)
         {
            Create(User);
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            return FindByCondition(u => u.Email.Equals(email)).FirstOrDefault();
+        }
+
+        public User Login(LoginModel loginModel)
+        {
+            return FindByCondition(u => u.Username.Equals(loginModel.Username) && u.Password.Equals(loginModel.Password)).FirstOrDefault();
+
         }
     }
 }

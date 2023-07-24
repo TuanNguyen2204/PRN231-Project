@@ -3,6 +3,7 @@ using BusinessObjects.Models;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Bibliography;
 using eClothesClient.Configuration;
+using eClothesClient.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using System.Web;
 namespace eClothesClient.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [RedirectUnauthenticated]
     public class OrderController : Controller
     {
         private readonly HttpClient client = null;

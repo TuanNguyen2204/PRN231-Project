@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Models;
+﻿using BusinessObjects.DTOs;
+using BusinessObjects.Models;
 using BusinessObjects.QueryParameters;
 using Repositories.Repository;
 using System;
@@ -16,5 +17,6 @@ namespace Repositories.Interfaces
         void UpdateUser(User user);
         void DeleteUser(User User);
         void CreateUser(User User);
+        User Login(LoginModel loginModel);
     }
 }

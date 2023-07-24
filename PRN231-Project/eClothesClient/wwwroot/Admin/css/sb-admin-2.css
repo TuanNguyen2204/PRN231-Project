@@ -10861,21 +10861,21 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
-  background-position: center;
-  background-size: cover;
+    background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y290aGVzJTIwc3RvcmV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60');
+    background-position: center;
+    background-size: cover;
 }
 
 .bg-register-image {
-  background: url("https://source.unsplash.com/Mv9hjnEUHR4/600x800");
-  background-position: center;
-  background-size: cover;
+    background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y290aGVzJTIwc3RvcmV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60');
+    background-position: center;
+    background-size: cover;
 }
 
 .bg-password-image {
-  background: url("https://source.unsplash.com/oWTW-jNGl9I/600x800");
-  background-position: center;
-  background-size: cover;
+    background: url("https://source.unsplash.com/oWTW-jNGl9I/600x800");
+    background-position: center;
+    background-size: cover;
 }
 
 form.user .custom-checkbox.small label {

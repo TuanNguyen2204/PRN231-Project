@@ -3,6 +3,7 @@ using BusinessObjects.Models;
 using BusinessObjects.QueryParameters;
 using ClosedXML.Excel;
 using eClothesClient.Configuration;
+using eClothesClient.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using System.Text;
 namespace eClothesClient.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [RedirectUnauthenticated]
     public class ProductsController : Controller
     {
         private Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv;

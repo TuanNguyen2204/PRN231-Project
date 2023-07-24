@@ -28,5 +28,14 @@ namespace eClothesClient.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet]
+        [HttpGet]
+        public IActionResult Signout()
+        {
+            Response.Cookies.Delete("access_token");
+            HttpContext.Session.Remove("Cart");
+            return RedirectToAction("Index");
+        }
     }
 }
