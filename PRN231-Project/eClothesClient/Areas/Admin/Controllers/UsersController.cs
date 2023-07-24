@@ -15,10 +15,12 @@ using ClosedXML.Excel;
 using eClothesClient.Configuration;
 using System.Text;
 using System.Net;
+using eClothesClient.Middleware;
 
 namespace eClothesClient.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [RedirectUnauthenticated]
     public class UsersController : Controller
     {
         private readonly HttpClient client = null;

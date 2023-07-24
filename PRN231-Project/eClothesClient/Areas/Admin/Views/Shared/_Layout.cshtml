@@ -99,19 +99,19 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="username"></span>
                                 <img class="img-profile rounded-circle"
-                                     src="img/undraw_profile.svg">
+                                     <img src="~/admin/img/undraw_profile.svg"/>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="~/Account/ProfileAdmin">
+                                <a class="dropdown-item" href="~/Account/Profile">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/Auth/SignIn?handler=SignOut" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -162,7 +162,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/Auth/SignIn?handler=SignOut">Logout</a>
+                    <a class="btn btn-primary" href="~/Home/Signout">Logout</a>
                 </div>
             </div>
         </div>
@@ -180,4 +180,45 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+<script>
+    const GetAccessToken = () => {
+        const cookieName = "access_token"; // Replace "accessToken" with the actual name of your cookie
+        const cookies = document.cookie.split("; ");
+        for (const cookie of cookies) {
+            const [cookieNameAndValue, ...rest] = cookie.split("=");
+            if (cookieNameAndValue === cookieName) {
+                return decodeURIComponent(rest.join("="));
+            }
+        }
+        return null;
+    }
+
+    const getUser = () => {
+        const token = GetAccessToken();
+        if (token) {
+            $.ajax({
+                url: 'https://localhost:7115/api/User/GetCurrentUser',
+                method: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                success: function (response) {
+                    console.log(response)
+                    $("#username").text(response.name);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                    window.location.href = 'https://localhost:7236/Login'
+                }
+            });
+        } else {
+            // If there is no access token, redirect to the login page
+            window.location.href = 'https://localhost:7236/Login';
+        }
+    }
+
+    getUser();
+</script>
+
 </html>

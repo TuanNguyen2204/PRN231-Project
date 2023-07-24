@@ -2,10 +2,13 @@
 using BusinessObjects.DTOs;
 using BusinessObjects.Models;
 using BusinessObjects.QueryParameters;
+using EcommerceAPI.Middleware;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Interfaces;
+using Repositories.Repository;
+using System.Security.Claims;
 
 namespace eClothesAPI.Controllers
 {
@@ -191,6 +194,28 @@ namespace eClothesAPI.Controllers
             {
                 _logger.LogError($"Something went wrong inside GetAllOwners action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
+            }
+        }
+        [AuthorizationUser]
+        [HttpGet]
+        public IActionResult GetCurrentUser()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User;
+            try
+            {
+                User u = null;
+                bool isAdmin = claimsPrincipal.IsInRole("Admin");
+                var userIdClaim = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == "UserId");
+                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int parsedUserId))
+                {
+                    u = _repository.User.GetUserById(parsedUserId);
+                }
+
+                return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Invalid access token");
             }
         }
     }
