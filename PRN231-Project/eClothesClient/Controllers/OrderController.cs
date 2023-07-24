@@ -27,8 +27,9 @@ namespace eClothesClient.Controllers
 
         }
 
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string? alertMessage)
         {
+           
             //var mySessionValue = HttpContext.Session.GetString("user");
             //var userObject = JsonConvert.DeserializeObject<dynamic>(mySessionValue);
             //var customerId = userObject.account.customerId;
@@ -52,6 +53,7 @@ namespace eClothesClient.Controllers
             total = GetTotal(cart);
             ViewData["total"] = total;
             GetCartCount();
+            ViewData["alertMessage"] = alertMessage;
             return View(listOrders);
         }
        
@@ -118,11 +120,11 @@ namespace eClothesClient.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                RedirectToAction("Index", "Cart", new { @alertMessage = "Order failed!" });
+                RedirectToAction("Index", "Order", new { @alertMessage = "Order failed!" });
             }
-
+            
             HttpContext.Session.Remove("Cart");
-            return RedirectToAction("Index", "Order", new { @alertMessage = "Order successfully!" });
+            return RedirectToAction("List", "Order", new { @alertMessage = "Order successfully!" });
         }
         public IActionResult GetCartCount()
         {
