@@ -74,7 +74,6 @@ namespace eClothesClient.Controllers
         }
 
         [HttpGet]
-        [HttpGet]
         public IActionResult Signout()
         {
             Response.Cookies.Delete("access_token");

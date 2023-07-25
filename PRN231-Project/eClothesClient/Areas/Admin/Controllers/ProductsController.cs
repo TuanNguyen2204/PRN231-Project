@@ -31,7 +31,7 @@ namespace eClothesClient.Areas.Admin.Controllers
             CategoryApiUrl = "https://localhost:7115/api/Category/GetCategories";
         }
 
-        public async Task<IActionResult> Index(int? CatId, string? ProductName, string? orderby, int PageNumber = 1, int PageSize = 10)
+        public async Task<IActionResult> Index(int? CatId, string? ProductName, string? orderby, int PageNumber = 1, int PageSize = 5)
         {
 
             var apiUrl = ProductApiUrl + $"?&PageNumber={PageNumber}&PageSize={PageSize}";

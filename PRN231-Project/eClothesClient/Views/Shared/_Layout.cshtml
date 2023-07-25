@@ -22,10 +22,12 @@
     <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/style.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
-    
+
 
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
@@ -68,13 +70,11 @@
                     </div>
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__right">
-                            <div class="header__top__links">
-                                <a href="#">Sign in</a>
-                                <a href="#">FAQs</a>
+                            <div class="header__top__links" id="signinLink">
+                                <a href="~/Login">Sign in</a>
                             </div>
-                            <div class="header__top__hover">
-                                <span>Sign out</span>
-                                
+                            <div class="header__top__links" id="signoutLink" style="display: none;">
+                                <a href="~/Register" class="logout-client">Sign out</a>
                             </div>
                         </div>
                     </div>
@@ -95,12 +95,12 @@
                             <li><a asp-controller="Product" asp-action="Index">Shop</a></li>
                             <!-- ... rest of the menu items ... -->
 
-                           
+
                             <li><a href="./blog.html">Blog</a></li>
                             <li><a href="./contact.html">Contacts</a></li>
-                             <li>
-                                <a asp-controller="Order" asp-action="List">My Orders</a>
-                               
+                            <li id="listOrderLink" style="display: none;">
+                                <a asp-controller="Order" asp-action="List" >My Orders</a>
+
                             </li>
                         </ul>
                     </nav>
@@ -117,7 +117,7 @@
                             </span>
                         </a>
 
-                        <div class="price">Hello, User</div>
+                        <div class="price"><span id="username"></span></div>
                     </div>
                 </div>
             </div>
@@ -205,12 +205,62 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Get the current URL path
-            var path = window.location.pathname;
+        //$(document).ready(function () {
+        //    // Get the current URL path
+        //    var path = window.location.pathname;
 
-            // Find the corresponding <li> tag with matching href and add the "active" class
-            $('.header__menu li a[href="' + path + '"]').parent('li').addClass('active');
+        //    // Find the corresponding <li> tag with matching href and add the "active" class
+        //    $('.header__menu li a[href="' + path + '"]').parent('li').addClass('active');
+        //});
+        const GetAccessToken = () => {
+            const cookieName = "access_token"; // Replace "accessToken" with the actual name of your cookie
+            const cookies = document.cookie.split("; ");
+            for (const cookie of cookies) {
+                const [cookieNameAndValue, ...rest] = cookie.split("=");
+                if (cookieNameAndValue === cookieName) {
+                    return decodeURIComponent(rest.join("="));
+                }
+            }
+            return null;
+        }
+
+        const getUser = () => {
+
+            const token = GetAccessToken();
+            $.ajax({
+                url: 'https://localhost:7115/api/User/GetCurrentUser',
+                method: 'GET',
+                contentType: 'application/json',
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                success: function (response) {
+                    $("#username").text(response.name);
+                    $("#signinLink").hide(); // Hide the "Sign in" link
+                    $("#signoutLink").show(); // Display the "Sign out" link
+                    $("#listOrderLink").show(); // Display the "Sign out" link
+
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                    $("#signinLink").show(); // Display the "Sign in" link
+                    $("#signoutLink").hide(); // Hide the "Sign out" link
+                    $("#listOrderLink").hide(); // Hide the "Sign out" link
+                }
+            });
+        }
+        getUser();
+
+        $(document).ready(function () {
+            $(".logout-client").on('click', function (e) {
+                e.preventDefault();
+
+                // Remove the 'access_token' cookie by setting its expiration to a past date
+                document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+                // Redirect to the login page
+                window.location.href = "https://localhost:7236/Login";
+            });
         });
     </script>
 

@@ -30,7 +30,7 @@ namespace eClothesClient.Areas.Admin.Controllers
             UserApi = "https://localhost:7115/api/User/GetUsers";
         }
 
-        public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, int PageNumber = 1, int PageSize = 1)
+        public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, int PageNumber = 1, int PageSize = 5)
         {
             var uriBuilder = new UriBuilder(OrderApi);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);

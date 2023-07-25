@@ -16,6 +16,7 @@ namespace BusinessObjects.DTOs
         public string PaymentMethod { get; set; } = null!;
         [Required]
         public string DeliveryLocation { get; set; } = null!;
+        public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
         public List<OrderDetailsDTO> OrderDetails { get; set; }
     }
