@@ -35,7 +35,7 @@ namespace eClothesClient.Areas.Admin.Controllers
         }
 
         // GET: Admin/Users
-        public async Task<IActionResult> Index(string? name, int PageNumber = 1, int PageSize = 10)
+        public async Task<IActionResult> Index(string? name, int PageNumber = 1, int PageSize = 5)
         {
             var apiUrl = UserApiUrl + $"?&PageNumber={PageNumber}&PageSize={PageSize}";
             if (!string.IsNullOrEmpty(name))
