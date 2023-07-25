@@ -16240,3 +16240,8 @@
 2023-07-17 14:42:11.5960 Debug FileTarget(Name=logfile): Preparing for new file: 'C:/Users/charlie.nguyen/Desktop/PRN231-Project/PRN231-Project/eClothesAPI/logs/2023-07-17_logfile.txt'
 2023-07-17 14:42:11.5960 Debug FileTarget(Name=logfile): Creating file appender: 'C:/Users/charlie.nguyen/Desktop/PRN231-Project/PRN231-Project/eClothesAPI/logs/2023-07-17_logfile.txt'
 2023-07-17 14:42:11.6170 Trace FileTarget(Name=logfile): Opening C:/Users/charlie.nguyen/Desktop/PRN231-Project/PRN231-Project/eClothesAPI/logs/2023-07-17_logfile.txt with allowFileSharedWriting=False
+2023-07-25 21:37:31.2591 Info Configuration file change detected! Reloading in 1000ms...
+2023-07-25 21:37:32.2667 Info Reloading configuration...
+2023-07-25 21:37:32.3075 Info Loading NLog config from XML file: D:\PRN231-Project\PRN231-Project\eClothesAPI\nlog.config
+2023-07-25 21:37:32.3075 Trace ParseNLogElement
+2023-07-25 21:37:32.3075 Trace ParseNLogConfig
