@@ -16245,3 +16245,8 @@
 2023-07-25 21:37:32.3075 Info Loading NLog config from XML file: D:\PRN231-Project\PRN231-Project\eClothesAPI\nlog.config
 2023-07-25 21:37:32.3075 Trace ParseNLogElement
 2023-07-25 21:37:32.3075 Trace ParseNLogConfig
+2023-07-25 21:50:48.6749 Info Configuration file change detected! Reloading in 1000ms...
+2023-07-25 21:50:49.6817 Info Reloading configuration...
+2023-07-25 21:50:49.6817 Info Loading NLog config from XML file: D:\PRN231-Project\PRN231-Project\eClothesAPI\nlog.config
+2023-07-25 21:50:49.6817 Trace ParseNLogElement
+2023-07-25 21:50:49.6922 Trace ParseNLogConfig
